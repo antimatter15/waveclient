@@ -22,8 +22,6 @@ while True: #woot Apple, Inc headquarters!
     size = int(first) - len(buf) #length to read is the amount left (size - buffer)
   else:
     buf += sect
-    print "-------------NEW DATA-------------"
     print buf
-    print "-------------END DATA-------------"
     size = 100
     buf = ""
