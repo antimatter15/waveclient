@@ -14,7 +14,7 @@ from waveapi import simplejson
 class WaveChannel():
     """Wave channel reader"""
     
-    crid = random.randint(0, 100000)
+    crid = 42#random.randint(0, 100000)
     client_version = 3
     channel_version = 6
     
@@ -22,7 +22,7 @@ class WaveChannel():
       return "".join([chr(random.randint(97,122)) for i in xrange(0, 11)])
     
     #do a channel post request
-    def req(self, payload = []): #payload is optional
+    def req(self, sid = None, payload = []): #payload is optional
       self.crid += 1 #increment
       #isn't a perfect clone of how it actually works, but shorter and works :)
       #as for future implementers, any random string would work.
@@ -34,9 +34,12 @@ class WaveChannel():
         'zx': self.zx(),
         't': 1 #TODO number of retries
       }
+      if sid is not None:
+        get['SID'] = sid
       for index, item in enumerate(payload):
         post["req"+str(index)+"_key"] = item #TODO do json encoding?
       print post
+      print urllib.urlencode(get)
       resp = wavehttp.post("/wave/wfe/channel?"+urllib.urlencode(get),urllib.urlencode(post))
       return resp
       
@@ -65,12 +68,10 @@ class WaveChannel():
         
     def search(self, sid, group):
         """returns search result for all group messages"""
-        self.crid += 1
         zx = "".join([chr(random.randint(97,122)) for i in xrange(0, 11)])
-        resdat = self.req(['{"a":"kA-_jfrF","r":"0","t":2007,"p":{"1000":[0,0],"2":"kA-_jfrF0"}}',
+        resdat = self.req(sid, ['{"a":"kA-_jfrF","r":"0","t":2007,"p":{"1000":[0,0],"2":"kA-_jfrF0"}}',
                            '{"a":"kA-_jfrF","r":"1","t":2602,"p":{"1000":[0,0],"2":"kA-_jfrF2","3":"","4":{"2":25,"1":0},"6":"public@a.gwave.com"}}']).read()
-        print resdat
-        pass
+        print "RESULT DATA",resdat
     
         
     def process_stream(self, sid, f):
