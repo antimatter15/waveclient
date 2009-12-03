@@ -36,6 +36,7 @@ class WaveChannel():
       }
       for index, item in enumerate(payload):
         post["req"+str(index)+"_key"] = item #TODO do json encoding?
+      print post
       resp = wavehttp.post("/wave/wfe/channel?"+urllib.urlencode(get),urllib.urlencode(post))
       return resp
       
@@ -64,7 +65,6 @@ class WaveChannel():
         
     def search(self, sid, group):
         """returns search result for all group messages"""
-        self.crid += 1
         zx = "".join([chr(random.randint(97,122)) for i in xrange(0, 11)])
         resdat = self.req(['{"a":"kA-_jfrF","r":"0","t":2007,"p":{"1000":[0,0],"2":"kA-_jfrF0"}}',
                            '{"a":"kA-_jfrF","r":"1","t":2602,"p":{"1000":[0,0],"2":"kA-_jfrF2","3":"","4":{"2":25,"1":0},"6":"public@a.gwave.com"}}']).read()
